@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="cupcake">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="\frontend\spen.png" />
+    <title>CHAGKID - ยินดีต้อนรับ</title> <!-- เปลี่ยน Title -->
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- DaisyUI CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.11.1/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <!-- SweetAlert2 CSS & JS CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Google Fonts & Custom Styles -->
+    <style> body { font-family: 'Kanit', sans-serif; } </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-base-200 text-base-content min-h-screen flex flex-col">
+
+    <!-- Updated Navbar with Logo & Search (DaisyUI) -->
+<nav class="navbar bg-base-100 shadow-md sticky top-0 z-50 px-2 sm:px-4"> <!-- เพิ่ม padding ตรงนี้เลย -->
+    <div class="flex-1">
+        <!-- Logo and Brand Name -->
+        <a href="index.html" class="btn btn-ghost text-lg sm:text-xl normal-case px-1 sm:px-2"> <!-- ลด padding ปุ่มนิดหน่อย -->
+            <!-- Logo Image -->
+            <img src="spen.png" alt="CHAGKID Logo" class="inline-block h-6 sm:h-8 w-auto mr-2"> <!-- <<< เพิ่ม img โลโก้ -->
+            CHAGKID <!-- <<< ชื่อแบรนด์ -->
+        </a>
+    </div>
+
+    <div class="flex-none gap-1 sm:gap-2"> <!-- ลด gap บนจอเล็ก -->
+        <!-- Search Icon (สำหรับจอเล็ก) -->
+         <button class="btn btn-ghost btn-circle sm:hidden"> <!-- แสดงเฉพาะจอเล็ก -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+        </button>
+         <!-- User Status/Buttons -->
+         <span id="user-info" class="text-xs sm:text-sm font-semibold hidden lg:inline"></span> <!-- ซ่อนชื่อยาวๆ บนจอเล็ก/กลาง -->
+         <a href="admin.html" id="admin-link" class="hidden btn btn-xs btn-outline btn-secondary">แอดมิน</a>
+         <button id="logout-button-prod" class="hidden btn btn-sm btn-error text-xs sm:text-sm">ออกจากระบบ</button> <!-- ใช้ ID กลาง logout-button ดีกว่า -->
+        <!-- อาจจะมีปุ่ม Cart -->
+    </div>
+</nav>
+
+    <!-- Main Content Area -->
+    <main class="container mx-auto mt-4 sm:mt-8 p-2 sm:p-4 flex-grow flex items-center justify-center"> <!-- flex items-center justify-center เพื่อจัดกลางแนวตั้ง/นอน -->
+
+        <!-- Auth Area (Single Column, Centered) -->
+        <div id="auth-area" class="w-full max-w-md"> <!-- กำหนดความกว้างสูงสุด -->
+
+            <!-- Login Form Card (แสดงเป็น Default) -->
+             <div id="login-section" class="card bg-base-100 shadow-xl w-full"> <!-- w-full ให้เต็ม max-w-md -->
+                <div class="card-body p-4 sm:p-6">
+                    <h2 class="card-title text-lg sm:text-xl justify-center mb-4">เข้าสู่ระบบ</h2>
+                    <form id="login-form" class="space-y-3 sm:space-y-4">
+                         <div class="form-control w-full">
+                            <label class="label" for="login-email">
+                                <span class="label-text">อีเมล:</span>
+                            </label>
+                            <input type="email" id="login-email" name="email" placeholder="อีเมลที่สมัครไว้" required autocomplete="username"
+                                   class="input input-bordered w-full input-sm sm:input-md" />
+                        </div>
+                        <div class="form-control w-full">
+                            <label class="label" for="login-password">
+                                <span class="label-text">รหัสผ่าน:</span>
+                            </label>
+                            <input type="password" id="login-password" name="password" placeholder="รหัสผ่านของคุณ" required autocomplete="current-password"
+                                   class="input input-bordered w-full input-sm sm:input-md" />
+                             <label class="label mt-1">
+                                <a href="#" class="label-text-alt link link-hover text-xs sm:text-sm">ลืมรหัสผ่าน? (ยังไม่ทำ)</a>
+                             </label>
+                        </div>
+                         <div class="form-control mt-6">
+                            <button type="submit" class="btn btn-primary w-full text-sm sm:text-base">
+                                เข้าสู่ระบบ
+                            </button>
+                        </div>
+                    </form>
+                    <!-- Link to Register -->
+                    <p class="text-center text-xs sm:text-sm mt-4">
+                        ยังไม่มีบัญชี? <a href="#" id="show-register-link" class="link link-secondary font-semibold">สมัครสมาชิกที่นี่</a>
+                    </p>
+                </div>
+            </div>
+
+             <!-- Register Form Card (ซ่อนไว้ก่อน) -->
+            <div id="register-section" class="card bg-base-100 shadow-xl w-full hidden"> <!-- <<< เพิ่ม class hidden -->
+                <div class="card-body p-4 sm:p-6">
+                    <h2 class="card-title text-lg sm:text-xl justify-center mb-4">สมัครสมาชิกใหม่</h2>
+                    <form id="register-form" class="space-y-3 sm:space-y-4">
+                        <div class="form-control w-full">
+                            <label class="label" for="reg-email">
+                                <span class="label-text">อีเมล:</span>
+                            </label>
+                            <input type="email" id="reg-email" name="email" placeholder="ใส่อีเมลของคุณ" required autocomplete="username"
+                                   class="input input-bordered w-full input-sm sm:input-md" />
+                        </div>
+                         <div class="form-control w-full">
+                            <label class="label" for="reg-password">
+                                <span class="label-text">รหัสผ่าน:</span>
+                            </label>
+                            <input type="password" id="reg-password" name="password" placeholder="ตั้งรหัสผ่าน (6+ ตัวอักษร)" required autocomplete="new-password" minlength="6"
+                                   class="input input-bordered w-full input-sm sm:input-md" />
+                        </div>
+                        <div class="form-control w-full">
+                            <label class="label" for="reg-name">
+                                <span class="label-text">ชื่อ (ไม่บังคับ):</span>
+                            </label>
+                            <input type="text" id="reg-name" name="name" placeholder="ชื่อที่แสดง" autocomplete="name"
+                                   class="input input-bordered w-full input-sm sm:input-md" />
+                        </div>
+                        <div class="form-control mt-6">
+                            <button type="submit" class="btn btn-success w-full text-sm sm:text-base">
+                                สมัครสมาชิก
+                            </button>
+                        </div>
+                    </form>
+                     <!-- Link to Login -->
+                     <p class="text-center text-xs sm:text-sm mt-4">
+                        มีบัญชีอยู่แล้ว? <a href="#" id="show-login-link" class="link link-primary font-semibold">เข้าสู่ระบบที่นี่</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Welcome Area (เมื่อ Login แล้ว - ซ่อนไว้ก่อน) -->
+            <div id="welcome-section" class="card bg-base-100 shadow-xl w-full hidden"> <!-- <<< เพิ่ม class hidden -->
+                 <div class="card-body items-center text-center p-6">
+                     <h2 class="card-title text-lg sm:text-xl">ยินดีต้อนรับ!</h2>
+                     <p id="welcome-message" class="text-sm sm:text-base mt-2 mb-4">คุณเข้าสู่ระบบเรียบร้อยแล้ว</p>
+                     <div class="card-actions justify-center w-full space-x-2">
+                          <button id="view-products-button-main" class="btn btn-warning btn-sm sm:btn-md">
+                            ไปดูสินค้ากัน!
+                          </button>
+                          <a href="admin.html" id="admin-panel-button-welcome" class="hidden btn btn-secondary btn-sm sm:btn-md">
+                             แผงควบคุมแอดมิน
+                          </a>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- ปิด auth-area -->
+    </main>
+
+    <!-- Footer (เหมือนเดิม) -->
+    <footer class="footer footer-center p-4 bg-base-300 text-base-content mt-auto">
+        <aside>
+            <p>© 2025 CHAGKID - สงวนลิขสิทธิ์ของ CHAGKID By CHAKRON</p>
+            
+            <nav class="mt-2">
+                <div class="grid grid-flow-col gap-4">
+                    <a class="link link-hover text-xs">เกี่ยวกับเรา</a>
+                    <a class="link link-hover text-xs">ติดต่อ</a>
+                    <a class="link link-hover text-xs">คำถามที่พบบ่อย</a>
+                </div>
+            </nav>
+        </aside>
+    </footer>
+        </aside>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

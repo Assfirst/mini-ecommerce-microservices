@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="night"> <!-- Theme Admin (เปลี่ยนได้) -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHAGKID - แผงควบคุมแอดมิน</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- DaisyUI CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.11.1/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <!-- SweetAlert2 CSS & JS CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Google Fonts & Custom Styles -->
+    <style> body { font-family: 'Kanit', sans-serif; } </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Favicon Link -->
+    <link rel="icon" type="image/png" href="spen.png" />
+</head>
+<body class="bg-base-200 text-base-content min-h-screen flex flex-col">
+
+     <!-- Navbar (Admin Theme) -->
+     <nav class="navbar bg-neutral text-neutral-content shadow-md sticky top-0 z-50 px-2 sm:px-4">
+        <div class="container mx-auto">
+            <div class="flex-1">
+                 <h1 class="btn btn-ghost text-lg sm:text-xl normal-case px-1">
+                    🛡️ แผงควบคุมแอดมิน
+                 </h1>
+            </div>
+            <div class="flex-none gap-1 sm:gap-2">
+                 <div class="hidden sm:flex items-center gap-2">
+                    <span id="admin-user-info" class="text-xs sm:text-sm font-semibold mr-2"></span>
+                    <a href="products.html" class="btn btn-xs btn-outline btn-info">ดูหน้าร้าน</a>
+                </div>
+                 <button id="logout-button-admin" class="btn btn-sm btn-error text-xs sm:text-sm"> <!-- ใช้ ID นี้ หรือ ID กลางก็ได้ -->
+                    ออกจากระบบ
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Content Area -->
+    <main id="admin-content" class="container mx-auto mt-4 sm:mt-8 p-2 sm:p-4 flex-grow" style="display: none;"> <!-- ซ่อนไว้ก่อน รอเช็คสิทธิ์ -->
+
+        <!-- Tabs -->
+        <div role="tablist" class="tabs tabs-lifted tabs-lg mb-6">
+
+            <!-- Product Tab -->
+            <input type="radio" name="admin_tabs" role="tab" class="tab" aria-label="จัดการสินค้า" checked />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-4 sm:p-6 shadow-xl">
+                <!-- Product Management Section -->
+                <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
+                    <h2 class="text-xl sm:text-2xl font-semibold">รายการสินค้า</h2>
+                    <button class="btn btn-primary btn-sm" id="add-product-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+                        เพิ่มสินค้าใหม่
+                    </button>
+                </div>
+                <!-- Product Table -->
+                <div class="overflow-x-auto">
+                    <table class="table table-zebra w-full table-sm sm:table-md"> <!-- Responsive table size -->
+                        <thead>
+                            <tr>
+                                <th class="w-12">ID</th>
+                                <th>รูป</th>
+                                <th>ชื่อสินค้า</th>
+                                <th>ราคา</th>
+                                <th class="hidden md:table-cell">คำอธิบาย</th> <!-- ซ่อนบนจอมือถือ -->
+                                <th class="w-28">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-table-body">
+                            <tr id="product-loading-row">
+                                <td colspan="6" class="text-center py-10">
+                                    <span class="loading loading-spinner loading-md"></span> กำลังโหลด...
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                             <tr>
+                                <th>ID</th>
+                                <th>รูป</th>
+                                <th>ชื่อสินค้า</th>
+                                <th>ราคา</th>
+                                <th class="hidden md:table-cell">คำอธิบาย</th>
+                                <th>จัดการ</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Banner Tab -->
+            <input type="radio" name="admin_tabs" role="tab" class="tab" aria-label="จัดการ Banner" />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-4 sm:p-6 shadow-xl">
+                 <!-- Banner Management Section -->
+                <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
+                    <h2 class="text-xl sm:text-2xl font-semibold">รายการ Banner</h2>
+                    <button class="btn btn-secondary btn-sm" id="add-banner-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+                        เพิ่ม Banner ใหม่
+                    </button>
+                </div>
+                <!-- Banner List/Grid -->
+                <div id="banner-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div id="banner-loading-placeholder" class="col-span-full text-center py-10">
+                        <span class="loading loading-spinner loading-md"></span> กำลังโหลด Banner...
+                    </div>
+                    <!-- Banner cards will be inserted here by admin.js -->
+                </div>
+            </div>
+
+        </div> <!-- ปิด Tabs -->
+
+        <!-- Product Add/Edit Modal -->
+        <dialog id="product_modal" class="modal modal-bottom sm:modal-middle"> <!-- Responsive Modal -->
+            <div class="modal-box w-full max-w-3xl"> <!-- ปรับขนาด -->
+                <form method="dialog">
+                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 z-10">✕</button>
+                </form>
+                <h3 class="font-bold text-lg mb-4" id="modal-title">เพิ่ม/แก้ไข สินค้า</h3>
+                <form id="product-form" class="space-y-4">
+                    <input type="hidden" id="product-id" name="productId">
+                    <div class="form-control">
+                        <label class="label" for="product-name"><span class="label-text">ชื่อสินค้า<span class="text-error">*</span></span></label>
+                        <input type="text" id="product-name" name="name" placeholder="ชื่อสินค้า" class="input input-bordered w-full input-sm sm:input-md" required />
+                    </div>
+                     <div class="form-control">
+                        <label class="label" for="product-description"><span class="label-text">คำอธิบาย</span></label>
+                        <textarea id="product-description" name="description" placeholder="รายละเอียดสินค้า" class="textarea textarea-bordered h-24 w-full textarea-sm sm:textarea-md"></textarea>
+                    </div>
+                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="form-control">
+                            <label class="label" for="product-price"><span class="label-text">ราคา<span class="text-error">*</span></span></label>
+                            <input type="number" id="product-price" name="price" placeholder="0.00" class="input input-bordered w-full input-sm sm:input-md" required step="0.01" min="0"/>
+                        </div>
+                         <div class="form-control">
+                            <label class="label" for="product-image-url"><span class="label-text">URL รูปภาพ (ถ้ามี)</span></label>
+                            <input type="url" id="product-image-url" name="image_url" placeholder="https://..." class="input input-bordered w-full input-sm sm:input-md" />
+                        </div>
+                    </div>
+                    <div class="modal-action mt-6 flex-wrap gap-2 justify-end"> <!-- flex-wrap เผื่อปุ่มเยอะ -->
+                        <button type="submit" class="btn btn-primary btn-sm sm:btn-md" id="save-product-button">บันทึก</button>
+                        <button type="button" class="btn btn-sm sm:btn-md" onclick="product_modal.close()">ยกเลิก</button>
+                    </div>
+                </form>
+            </div>
+             <form method="dialog" class="modal-backdrop">
+                <button>close</button>
+            </form>
+        </dialog>
+
+        <!-- Banner Add/Edit Modal -->
+        <dialog id="banner_modal" class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box w-full max-w-lg">
+                <form method="dialog">
+                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 z-10">✕</button>
+                </form>
+                <h3 class="font-bold text-lg mb-4" id="banner-modal-title">เพิ่ม/แก้ไข Banner</h3>
+                <form id="banner-form" class="space-y-3">
+                    <input type="hidden" id="banner-id" name="bannerId">
+                    <div class="form-control">
+                        <label class="label" for="banner-image-url"><span class="label-text">URL รูปภาพ Banner<span class="text-error">*</span></span></label>
+                        <input type="url" id="banner-image-url" name="image_url" placeholder="https://... หรือ /uploads/..." class="input input-bordered w-full input-sm" required />
+                    </div>
+                     <div class="form-control">
+                        <label class="label" for="banner-alt-text"><span class="label-text">ข้อความ Alt</span></label>
+                        <input type="text" id="banner-alt-text" name="alt_text" placeholder="คำอธิบายรูปภาพ" class="input input-bordered w-full input-sm" />
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="banner-link-url"><span class="label-text">URL ลิงก์</span></label>
+                        <input type="url" id="banner-link-url" name="link_url" placeholder="https://... หรือ #" class="input input-bordered w-full input-sm" />
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="banner-title"><span class="label-text">ข้อความบน Banner</span></label>
+                        <input type="text" id="banner-title" name="title" placeholder="เช่น 🔥 ลดแรง! 🔥" class="input input-bordered w-full input-sm" />
+                    </div>
+                     <div class="form-control">
+                        <label class="label" for="banner-display-order"><span class="label-text">ลำดับการแสดง</span></label>
+                        <input type="number" id="banner-display-order" name="display_order" value="0" class="input input-bordered w-full input-sm" min="0" />
+                    </div>
+                    <div class="modal-action mt-5 flex-wrap gap-2 justify-end">
+                        <button type="submit" class="btn btn-secondary btn-sm sm:btn-md" id="save-banner-button">บันทึก Banner</button>
+                        <button type="button" class="btn btn-sm" onclick="banner_modal.close()">ยกเลิก</button>
+                    </div>
+                </form>
+            </div>
+             <form method="dialog" class="modal-backdrop">
+                <button>close</button>
+            </form>
+        </dialog>
+
+    </main> <!-- ปิด Main Content -->
+
+    <!-- Footer -->
+    <footer class="footer footer-center p-4 bg-neutral text-neutral-content mt-auto">
+        <aside>
+            <p>© 2025 CHAGKID - สงวนลิขสิทธิ์ของ CHAGKID By CHAKRON</p>
+        </aside>
+    </footer>
+
+    <!-- เรียกใช้ JavaScript ของหน้านี้ -->
+    <script src="admin.js"></script>
+</body>
+</html>

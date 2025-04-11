@@ -1,0 +1,38 @@
+# Dependencies and installed packages
+**/node_modules/
+
+# Environment variables (VERY IMPORTANT!)
+.env
+*.env
+.env.*
+
+# Log files
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# SQLite Database files (Optional - ถ้าไม่อยาก commit ข้อมูลตัวอย่าง)
+# ถ้าอยากเก็บข้อมูลตัวอย่างไปด้วย ให้ลบ/คอมเมนต์บรรทัดข้างล่างนี้ออก
+*.db
+*.db-journal
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build output (if any)
+/dist/
+/build/
+
+# IDE / Editor specific files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

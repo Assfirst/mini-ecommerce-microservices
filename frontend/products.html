@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="cupcake"> <!-- <<< กำหนด Theme (เปลี่ยนได้) -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHAGKID - สินค้า</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- DaisyUI CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.11.1/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <!-- SweetAlert2 CSS & JS CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Google Fonts & Custom Styles -->
+    <style> body { font-family: 'Kanit', sans-serif; } </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Favicon Link -->
+    <link rel="icon" type="image/png" href="spen.png" /> <!-- <<< ลิงก์ไปยัง Favicon -->
+</head>
+<body class="bg-base-200 text-base-content min-h-screen flex flex-col">
+
+    <!-- Updated Navbar with Logo & Search (DaisyUI) -->
+    <nav class="navbar bg-base-100 shadow-md sticky top-0 z-50 px-2 sm:px-4">
+        <div class="flex-1">
+            <!-- Logo and Brand Name -->
+            <a href="index.html" class="btn btn-ghost text-lg sm:text-xl normal-case px-1 sm:px-2">
+                <img src="spen.png" alt="CHAGKID Logo" class="inline-block h-6 sm:h-8 w-auto mr-2">
+                CHAGKID
+            </a>
+            <!-- Search Bar (อยู่ตรงกลาง ใช้ flex-grow ดัน) -->
+            <div class="flex-grow max-w-md mx-4 hidden sm:block">
+                <div class="form-control">
+                    <input type="text" placeholder="🔍 ค้นหาสินค้า..." id="search-input"
+                           class="input input-bordered input-sm sm:input-md w-full" />
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-none gap-1 sm:gap-2">
+            <!-- Search Icon (สำหรับจอเล็ก) -->
+             <button class="btn btn-ghost btn-circle sm:hidden" id="search-icon-mobile"> <!-- เพิ่ม ID -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            </button>
+             <!-- User Status/Buttons -->
+             <span id="user-info" class="text-xs sm:text-sm font-semibold hidden lg:inline mr-2"></span> <!-- ซ่อนชื่อยาวๆ -->
+             <a href="admin.html" id="admin-link" class="hidden btn btn-xs btn-outline btn-secondary">แอดมิน</a>
+             <button id="logout-button" class="hidden btn btn-sm btn-error text-xs sm:text-sm">ออกจากระบบ</button> <!-- <<< ใช้ ID กลาง logout-button -->
+            <!-- Cart Icon Placeholder -->
+             <button class="btn btn-ghost btn-circle ml-1" id="cart-button">
+                 <div class="indicator">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                     <span class="badge badge-sm badge-primary indicator-item" id="cart-count">0</span> <!-- ID สำหรับจำนวนของ -->
+                 </div>
+             </button>
+        </div>
+    </nav>
+     <!-- Search Bar (สำหรับจอเล็ก - ซ่อนไว้ก่อน) -->
+    <div id="search-bar-mobile" class="px-4 pb-2 pt-1 bg-base-100 shadow-md hidden sm:hidden">
+        <div class="form-control">
+             <input type="text" placeholder="🔍 ค้นหาสินค้า..." id="search-input-mobile"
+                   class="input input-bordered input-sm w-full" />
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="container mx-auto mt-4 sm:mt-8 p-2 sm:p-4 flex-grow">
+
+        <!-- Banner Carousel Container (จะถูกเติมโดย JS) -->
+        <div id="banner-carousel" class="carousel w-full rounded-box shadow-lg mb-6 sm:mb-8 h-56 sm:h-72 md:h-96 bg-base-200 flex items-center justify-center overflow-hidden"> <!-- overflow-hidden กันรูปเลย -->
+            <!-- Loading or Placeholder for Banners -->
+             <div id="banner-loading" class="text-center">
+                 <span class="loading loading-ring loading-lg text-primary"></span>
+             </div>
+             <!-- Banner slides will be inserted here by products.js -->
+        </div>
+
+        <!-- Product Section -->
+        <div class="bg-base-100 p-4 sm:p-6 rounded-lg shadow-xl">
+            <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-center">รายการสินค้าทั้งหมด</h2>
+            <!-- Product Grid -->
+            <div id="product-list" class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6"> <!-- ปรับ grid cols และ gap -->
+                <!-- Loading Placeholder -->
+                <div id="loading-products" class="col-span-full text-center py-10">
+                    <span class="loading loading-spinner loading-lg text-primary"></span>
+                    <p class="mt-2 text-lg">กำลังโหลดสินค้า...</p>
+                </div>
+                 <!-- Product Cards will be inserted here by products.js -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer footer-center p-4 bg-base-300 text-base-content mt-auto">
+        <aside>
+            <p>© 2025 CHAGKID - สงวนลิขสิทธิ์ของ CHAGKID By CHAKRON</p>
+            <nav class="mt-2">
+                <div class="grid grid-flow-col gap-4">
+                    <a class="link link-hover text-xs">เกี่ยวกับเรา</a>
+                    <a class="link link-hover text-xs">ติดต่อ</a>
+                    <a class="link link-hover text-xs">คำถามที่พบบ่อย</a>
+                </div>
+            </nav>
+        </aside>
+    </footer>
+
+    <!-- เรียกใช้ JavaScript ของหน้านี้ -->
+    <script src="products.js"></script>
+</body>
+</html>
