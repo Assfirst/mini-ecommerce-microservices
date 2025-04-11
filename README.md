@@ -1,4 +1,5 @@
-#เอกสารข้อกำหนดคุณสมบัติ (Feature Specification Document)
+#เอกสารข้อกำหนดคุณสมบัติ (Feature Specification Document)#
+
 โครงการ: ระบบร้านค้าออนไลน์ขนาดเล็ก (Mini E-commerce Microservices)
 เวอร์ชัน: 1.0
 วันที่: 24 พฤษภาคม 2567
@@ -233,4 +234,4 @@ Frontend:
 
 การ Deploy ระบบไปยัง Cloud Environment (เช่น Docker, Kubernetes)
 
-นี่คือภาพรวมสเปคของระบบที่เราสร้างกันมานะเพื่อน ถ้ามีส่วนไหนอยากปรับแก้ หรืออยากให้ลงรายละเอียดเพิ่ม บอกได้เลย! 👍
+
