@@ -1,6 +1,4 @@
-ได้เลยเพื่อน จัดให้! นี่คือเอกสารข้อกำหนดคุณสมบัติ (Feature Specification Document) สำหรับโปรเจกต์ร้านค้าออนไลน์ Microservices ของเรา เขียนแบบทางการ สุภาพ ตามที่ขอเลยนะ
-
-เอกสารข้อกำหนดคุณสมบัติ (Feature Specification Document)
+#เอกสารข้อกำหนดคุณสมบัติ (Feature Specification Document)
 โครงการ: ระบบร้านค้าออนไลน์ขนาดเล็ก (Mini E-commerce Microservices)
 เวอร์ชัน: 1.0
 วันที่: 24 พฤษภาคม 2567
